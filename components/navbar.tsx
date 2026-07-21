@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,10 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet";
 
 export function Navbar() {
-  const pathname = usePathname();
   const scrolled = useScrolled(40);
   const [open, setOpen] = useState(false);
-  const waitlistHref = pathname === "/" ? "#waitlist" : "/";
 
   return (
     <header
@@ -53,7 +50,7 @@ export function Navbar() {
 
         <div className="hidden lg:block">
           <Button asChild variant="gold" size="sm">
-            <Link href={waitlistHref}>Join Waitlist</Link>
+            <Link href="#waitlist">Join Waitlist</Link>
           </Button>
         </div>
 
@@ -87,7 +84,7 @@ export function Navbar() {
             <div className="mt-auto pt-6">
               <SheetClose asChild>
                 <Button asChild variant="gold" className="w-full">
-                  <Link href={waitlistHref}>Join Waitlist</Link>
+                  <Link href="#waitlist">Join Waitlist</Link>
                 </Button>
               </SheetClose>
             </div>

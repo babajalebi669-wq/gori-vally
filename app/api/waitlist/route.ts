@@ -22,10 +22,6 @@ const requestLog = new Map<string, number[]>();
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const timestamps = (requestLog.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-  if (timestamps.length > RATE_LIMIT_MAX_REQUESTS) {
-    requestLog.set(ip, timestamps);
-    return true;
-  }
   timestamps.push(now);
   requestLog.set(ip, timestamps);
   return timestamps.length > RATE_LIMIT_MAX_REQUESTS;

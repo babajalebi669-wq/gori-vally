@@ -10,7 +10,6 @@ interface ImageBannerProps {
   overlay?: "dark" | "none";
   className?: string;
   id?: string;
-  priority?: boolean;
 }
 
 export function ImageBanner({
@@ -21,7 +20,6 @@ export function ImageBanner({
   overlay = "dark",
   className,
   id,
-  priority,
 }: ImageBannerProps) {
   return (
     <section
@@ -32,7 +30,7 @@ export function ImageBanner({
         className
       )}
     >
-      <Image src={image} alt={imageAlt} fill sizes="100vw" className="object-cover" priority={priority} />
+      <Image src={image} alt={imageAlt} fill sizes="100vw" className="object-cover" />
       {overlay === "dark" && (
         <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/60" />
       )}

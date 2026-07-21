@@ -15,7 +15,7 @@ interface ComingSoonProps {
  *  about what exists today while still converting interest into an email. */
 export function ComingSoon({ image, imageAlt, headline, description, source }: ComingSoonProps) {
   return (
-    <ImageBanner image={image} imageAlt={imageAlt} minHeight="min-h-[92vh]" id="waitlist" priority>
+    <ImageBanner image={image} imageAlt={imageAlt} minHeight="min-h-[92vh]" id="waitlist">
       <CTA eyebrow="Coming Soon" headline={headline} description={description} align="center">
         <div className="mx-auto">
           <WaitlistForm source={source} variant="full" />

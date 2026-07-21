@@ -34,12 +34,26 @@ comment on column public.waitlist.metadata is 'Freeform JSON for extra context (
 create index if not exists waitlist_created_at_idx on public.waitlist (created_at desc);
 
 -- ----------------------------------------------------------------------------
+-- Grants
+-- ----------------------------------------------------------------------------
+-- GRANT and RLS are two different layers: GRANT controls whether a role can
+-- reach the table via the Data API at all; RLS then controls which rows/
+-- operations are allowed within that. As of May 30 2026, new Supabase
+-- projects no longer auto-grant table access to anon/authenticated/
+-- service_role the way older projects did — without these, Postgres
+-- rejects the request with a 42501 permission error before RLS policies
+-- are even evaluated. Safe to run on older projects too (granting an
+-- already-granted privilege is a harmless no-op).
+grant insert on public.waitlist to anon;
+grant select, insert, update, delete on public.waitlist to service_role;
+
+-- ----------------------------------------------------------------------------
 -- Row Level Security
 -- ----------------------------------------------------------------------------
 alter table public.waitlist enable row level security;
 
--- Anyone using the public anon key can insert a new signup — this is what
--- powers the public waitlist form (see app/api/waitlist/route.ts).
+-- Anyone using the public anon/publishable key can insert a new signup —
+-- this is what powers the public waitlist form (see app/api/waitlist/route.ts).
 create policy "Public can insert into waitlist"
   on public.waitlist
   for insert
@@ -48,8 +62,9 @@ create policy "Public can insert into waitlist"
 
 -- No SELECT / UPDATE / DELETE policy is defined for `anon` or `authenticated`,
 -- so those operations are denied by default under RLS. All reads happen
--- server-side with the service role key (see lib/supabase/admin.ts), which
--- bypasses RLS entirely — this is how "public can insert, only admin can
+-- server-side with the service_role/secret key (see lib/supabase/admin.ts),
+-- which bypasses RLS's row-level checks (it still needed the GRANT above to
+-- reach the table at all) — this is how "public can insert, only admin can
 -- read" is enforced today, with no auth system required yet.
 --
 -- TODO (future): once Supabase Auth is added for an admin dashboard, add a

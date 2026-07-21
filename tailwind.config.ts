@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 // Gori Valley brand tokens — Himalayan palette, no gradients, no neon.
 // See README.md "Design system" section for the reasoning behind these choices.
@@ -50,7 +51,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 };
 
 export default config;

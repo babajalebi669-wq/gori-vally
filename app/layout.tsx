@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Fraunces, Work_Sans, IBM_Plex_Mono } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -76,15 +76,21 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable}`}>
-      <body className="font-sans">
+    // suppressHydrationWarning on <html>/<body> only ignores attribute
+    // mismatches on these two nodes specifically — it does NOT disable
+    // hydration checks anywhere else. It's here because browser extensions
+    // (ad/analytics blockers, Grammarly, Dark Reader, etc.) commonly inject
+    // attributes like `data-google-analytics-opt-out` onto <html> before
+    // React hydrates, which otherwise logs a harmless but alarming-looking
+    // console warning. See https://react.dev/link/hydration-mismatch
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${workSans.variable} ${plexMono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
@@ -99,6 +105,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }),
           }}
         />
+      </head>
+      <body className="font-sans" suppressHydrationWarning>
         <Navbar />
         <main>{children}</main>
         <Footer />
